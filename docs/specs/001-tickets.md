@@ -20,3 +20,14 @@ Each ticket goes end to end and can be shipped on its own. `→` = depends on.
 | T14 | Playwright smoke test (mobile + desktop), real-model eval set script → T12 | Green | — |
 
 **Go/no-go gate after T1.** If live text or segmentation quality is poor on your real images, change the scope (e.g. text as raster + optional OCR) before building T2+.
+
+## CI/CD added per ticket (each step becomes a required check)
+| Ticket | Adds |
+|---|---|
+| done | `secret-scan` (gitleaks, full history) |
+| T2 | lint, typecheck, Vitest; dependency caching; run only affected packages; target < 5 min |
+| T7 | build + bundle-size budget; Cloudflare Pages **preview deploy per PR** |
+| T12 | export golden-file tests |
+| T13 | **production deploy on merge to `main`**, only after rate limits, budget cap and auto-delete exist |
+| T14 | Playwright smoke test (mobile + desktop) |
+| never | real-model runs in CI (eval set runs on demand) |
