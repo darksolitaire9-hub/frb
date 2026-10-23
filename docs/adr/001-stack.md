@@ -6,19 +6,21 @@ Status: Accepted · Date: 2026-10-23
 The product is a browser editor (heavy on the client, mobile + desktop) plus long-running async AI jobs (30–120 s). Goals: maintainability and performance. Only one developer.
 
 ## Decision
-- **TypeScript strict everywhere**, pnpm workspaces: `web`, `api`, `shared` (LayeredDocument types + zod schemas).
-- **web:** React + Vite SPA, Konva (`react-konva`) canvas, Zustand + pure reducer, vanilla CSS.
-- **api:** Hono on Node, zod validation, Postgres + Drizzle, BullMQ + Redis workers.
-- **imaging:** sharp (normalise/TIFF), ag-psd (PSD with live text).
-- **AI:** Replicate/fal.ai + Google Vision OCR, each behind an adapter.
-- **storage:** Cloudflare R2. **hosting:** Cloudflare Pages (web), Fly.io/Railway (api + workers).
-- **tests:** Vitest + Playwright. **later:** Better Auth, Stripe.
+- **Platform & Host:** Cloudflare (100% Free-Tier Architecture: Pages for unlimited static CDN, Workers for API, R2 for $0 egress storage, D1 for serverless SQL).
+- **Frontend (`packages/web`):** React 19 + Vite 6 SPA, Konva 9 (`react-konva`) for hardware-accelerated 2D canvas, Zustand 5 pure reducer, Vanilla CSS Tokens enforcing **Negative Space Thinking** (macro/micro whitespace, Gestalt proximity grouping, line-height 1.5, breathing room over harsh borders), and Radix UI accessible headless primitives with Lucide icons.
+- **Backend API (`packages/worker`):** Hono v4 on Cloudflare Workers (0ms cold start, 100k free calls/day, native TypeScript).
+- **Vision & Text Engine:** Google AI Studio (Gemini 3.5 / 3.8 Flash free tier: 15 RPM, 1,500 free calls/day) for sub-pixel bounding box localization, OCR, and font extraction.
+- **Object Segmentation:** Client-side WebGPU via `@huggingface/transformers` (BiRefNet / RMBG-1.4) executing directly on user hardware for $0 server cost; fallback to Gemini bounding boxes.
+- **Background Inpaint:** Cloudflare Workers AI (10,000 free neurons/day) + smart client-side color-fill fallback.
+- **Export Engine:** `ag-psd` running client-side / edge for layered Photoshop PSDs with live text; `sharp` for high-res flat TIFF.
+- **Contract & Schemas (`packages/shared`):** Canonical `LayeredDocument` schema defined via Zod 3.24+, shared directly across client and worker.
+- **Testing & CI/CD:** Vitest for pure reducer and schema validation; **Playwright** for multi-viewport E2E smoke tests (desktop 1280px, mobile 375px touch) running in GitHub Actions CI.
 
 ## Alternatives rejected
-- **Next.js:** no SEO/SSR need; serverless doesn't suit long jobs; couples web and API deploys.
-- **Python backend:** only worth it if we self-host models; we call cloud APIs, and one language gives us shared types.
-- **Fabric.js / PixiJS:** Fabric is weaker with React; Pixi has no editing tools.
+- **Next.js (OpenNext / Vinext):** Unnecessary SSR overhead for a 100% client-side canvas app; isolate memory leaks and compiler adapter instability on Cloudflare Workers.
+- **Legacy AI (Real-ESRGAN / legacy OCR):** Replaced by 2026 SOTA: Gemini 3 Flash spatial vision + WebGPU client segmentation.
 
 ## Consequences
-- Two deployments (web, api) to manage, in exchange for independent scaling and a static, fast editor.
-- Changes to the LayeredDocument schema go through `shared` with a `schemaVersion` bump.
+- Free tier sustainability: $0/month operational baseline.
+- Client-side proxy separation: editor manipulates downscaled proxies (≤2048px); master 8K assets are never buffered in edge isolate memory.
+
