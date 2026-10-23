@@ -43,6 +43,14 @@ Hot-path rules:
 - Pipeline stages: retry with backoff, per-stage timeout, and a clear user-facing message on failure.
 - Structured logs (JSON) with `jobId` on every line. Never log image content or signed URLs.
 
+## 4b. Secrets (the repo is PUBLIC)
+- Real values live only in `.env` (gitignored) locally and in the host's secret store or GitHub Actions secrets in deployment. `.env.example` lists names only.
+- **All API keys are server-only.** Never prefix them with `VITE_`, never send them to the browser. The browser talks only to our API, which talks to the providers.
+- Read env vars in one place (`api/config`), validate them with zod at boot, and fail fast if any are missing. Never log the config object.
+- Use scoped, low-limit keys per environment (dev ≠ prod). Set spend caps at each provider.
+- Four layers of defence: local `gitleaks` pre-commit hook → GitHub push protection → `secret-scan` CI (full history, required check) → GitHub secret scanning alerts.
+- **If a key leaks: rotate it at the provider first, immediately.** Rewriting git history is not enough, because public repos get scraped within minutes.
+
 ## 5. Testing
 - Vitest. Test behaviour at the seams in Spec 001: **Pipeline seam** (fake adapters + golden fixtures) and **Export seam** (read the PSD back).
 - Reducer tests for every editor action. One Playwright smoke test each for mobile and desktop.
