@@ -14,6 +14,9 @@ build/
 .turbo/
 coverage/
 *.tsbuildinfo
+playwright-report/
+test-results/
+blob-report/
 
 # Env & secrets
 .env

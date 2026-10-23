@@ -1,0 +1,86 @@
+/* ==========================================================================
+   FRB Studio Design System — Negative Space & Obsidian Theme
+   ========================================================================== */
+
+:root {
+  /* Negative Space System: Macro Whitespace (Layout Breathing Room) */
+  --space-macro-2xl: 4.5rem;   /* 72px - Hero / Section margins */
+  --space-macro-xl: 3rem;       /* 48px - Primary view containers */
+  --space-macro-lg: 2rem;       /* 32px - Module spacing */
+  --space-macro-md: 1.5rem;     /* 24px - Panel separation */
+  --space-macro-sm: 1rem;       /* 16px - Sub-grouping */
+
+  /* Negative Space System: Micro Whitespace (Touch Targets & Line Height) */
+  --space-micro-md: 0.875rem;   /* 14px */
+  --space-micro-sm: 0.625rem;   /* 10px - Input/Button internal padding */
+  --space-micro-xs: 0.375rem;   /* 6px  - Icon spacing */
+  --line-height-body: 1.55;     /* Enforced 1.4-1.6 per Negative Space Skill */
+  --line-height-tight: 1.25;
+
+  /* Obsidian Studio Palette */
+  --bg-app: #090b0e;
+  --bg-surface: #12151b;
+  --bg-surface-elevated: rgba(22, 27, 34, 0.75);
+  --bg-surface-active: #1f242d;
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-focus: rgba(99, 102, 241, 0.6);
+
+  /* Semantic Accent Colors */
+  --accent-primary: #6366f1;
+  --accent-primary-hover: #4f46e5;
+  --accent-glow: rgba(99, 102, 241, 0.25);
+  --warning-amber: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --success-emerald: #10b981;
+
+  /* Text & Hierarchy */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Elevations & Radii */
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --glass-blur: blur(16px);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: var(--line-height-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Base interactive focus */
+button, input {
+  font-family: inherit;
+  color: inherit;
+}
+
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
