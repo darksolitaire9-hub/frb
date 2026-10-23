@@ -1,0 +1,28 @@
+# Private: agent skills and research (never commit)
+.agents/
+research/
+*.private.md
+
+# Client images / test fixtures with real client data
+fixtures/private/
+samples/
+
+# Deps & builds
+node_modules/
+dist/
+build/
+.turbo/
+coverage/
+*.tsbuildinfo
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
